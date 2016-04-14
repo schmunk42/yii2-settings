@@ -140,6 +140,41 @@ class Settings extends Component
     }
 
     /**
+     * Return if the given key and section exists.
+     * You can use dot notation to separate the section from the key:
+     * $value = $settings->has('section.key');
+     * and
+     * $value = $settings->has('key', 'section');
+     * are equivalent
+     *
+     * @param $key
+     * @param null $section
+     * @param null $default
+     * @return mixed
+     */
+    public function has($key, $section = null)
+    {
+        if (is_null($section)) {
+            $pieces = explode('.', $key, 2);
+            if (count($pieces) > 1) {
+                $section = $pieces[0];
+                $key = $pieces[1];
+            } else {
+                $section = '';
+            }
+        }
+
+        // TODO: value is uncached
+        $data = $this->model->getSettings(false);
+
+        if (isset($data[$section][$key][0])) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
      * Deletes a setting
      *
      * @param $key

@@ -20,7 +20,7 @@ interface SettingInterface
      * Gets a combined map of all the settings.
      * @return array
      */
-    public function getSettings();
+    public function getSettings($activeOnly = true);
 
     /**
      * Saves a setting

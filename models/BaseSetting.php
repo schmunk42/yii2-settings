@@ -91,9 +91,13 @@ class BaseSetting extends ActiveRecord implements SettingInterface
     /**
      * @inheritdoc
      */
-    public function getSettings()
+    public function getSettings($onlyActive = true)
     {
-        $settings = static::find()->where(['active' => true])->asArray()->all();
+        $query = static::find();
+        if ($onlyActive === true) {
+            $query->where(['active' => true]);
+        }
+        $settings = $query->asArray()->all();
         return array_merge_recursive(
             ArrayHelper::map($settings, 'key', 'value', 'section'),
             ArrayHelper::map($settings, 'key', 'type', 'section')
